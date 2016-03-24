@@ -100,7 +100,7 @@
 
         var path = svg.append('g')
           .attr("id", "NC_002703_data")
-          .selectAll("rect")                             //svg already refers to the paths in g div
+          .selectAll("rect")
           .data(NC_002703_data).enter()
           .append('rect')
           .attr("data-strand", function(d) { return d.strand })
@@ -118,7 +118,7 @@
 
         var path = svg.append('g')
           .attr("id", "NC_003212_data")
-          .selectAll("rect")                             //svg already refers to the paths in g div
+          .selectAll("rect")
           .data(NC_003212_data)
           .enter()
           .append('rect')
@@ -136,7 +136,7 @@
 
         var path = svg.append('g')
           .attr("id", "AF323668_data")
-          .selectAll("rect")                             //svg already refers to the paths in g div
+          .selectAll("rect")
           .data(AF323668_data)
           .enter()
           .append('rect')
