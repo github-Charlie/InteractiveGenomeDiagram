@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Genome diagram test</title>
+    <link rel="stylesheet" href="normalize.css">
+    <style>
+      .tooltip {
+        position: absolute;
+        background: #eee;
+        box-shadow: 0 0 5px #999999;
+        color: #333;
+        display: none;
+        font-size: 12px;
+        padding: 10px;
+        text-align: center;
+        top: 95px;
+        left:500;
+        width: 120px;
+        z-index: 10;       
+        }
+      
+      .legend {
+        font-size: 12px;
+      }
+      rect {
+        cursor: pointer;
+        stroke-width: 2;
+      }
+      rect.disabled {
+        fill: transparent !important;
+      }
+      h1 {
+        font-size: 14px;
+        text-align: center;
+      } 
+    </style>
+  </head>
+  <body>
+    <div id="chart"></div>
+    <script src="d3.min.js"></script>
+    <script>
+        var NC_002703_data = [{"endAngle": 0.19957023246002908, "end_location": 1218, "type": "gene", "start_location": 93, "strand": -1, "startAngle": 0.015238121197686952, "locus_tag": "Tuc2009_01"}, {"endAngle": 0.304762423953739, "end_location": 1860, "type": "gene", "start_location": 1338, "strand": -1, "startAngle": 0.21923232432801226, "locus_tag": "Tuc2009_02"}, {"endAngle": 0.4556689790405098, "end_location": 2781, "type": "gene", "start_location": 1920, "strand": -1, "startAngle": 0.31459346988773057, "locus_tag": "Tuc2009_03"}, {"endAngle": 0.5330065403879103, "end_location": 3253, "type": "gene", "start_location": 3022, "strand": 1, "startAngle": 0.49515701354204267, "locus_tag": "Tuc2009_04"}, {"endAngle": 0.6526175992514744, "end_location": 3983, "type": "gene", "start_location": 3266, "strand": 1, "startAngle": 0.5351366003402751, "locus_tag": "Tuc2009_05"}, {"endAngle": 0.7096376656686257, "end_location": 4331, "type": "gene", "start_location": 3995, "strand": 1, "startAngle": 0.6545838084382728, "locus_tag": "Tuc2009_06"}, {"endAngle": 0.7301190113644415, "end_location": 4456, "type": "gene", "start_location": 4327, "strand": 1, "startAngle": 0.7089822626063595, "locus_tag": "Tuc2009_07"}, {"endAngle": 0.7640361198367124, "end_location": 4663, "type": "gene", "start_location": 4468, "strand": 1, "startAngle": 0.7320852205512398, "locus_tag": "Tuc2009_08"}, {"endAngle": 0.860708071520963, "end_location": 5253, "type": "gene", "start_location": 5037, "strand": 1, "startAngle": 0.8253163061585933, "locus_tag": "Tuc2009_09"}, {"endAngle": 0.8770931480776155, "end_location": 5353, "type": "gene", "start_location": 5254, "strand": 1, "startAngle": 0.8608719222865294, "locus_tag": "Tuc2009_10"}, {"endAngle": 0.9645894568901408, "end_location": 5887, "type": "gene", "start_location": 5368, "strand": 1, "startAngle": 0.8795509095611135, "locus_tag": "Tuc2009_11"}, {"endAngle": 1.0681431407281854, "end_location": 6519, "type": "gene", "start_location": 5895, "strand": 1, "startAngle": 0.9659002630146728, "locus_tag": "Tuc2009_12"}, {"endAngle": 1.1422036867642553, "end_location": 6971, "type": "gene", "start_location": 6518, "strand": 1, "startAngle": 1.0679792899626188, "locus_tag": "Tuc2009_13"}, {"endAngle": 1.2908163311330947, "end_location": 7878, "type": "gene", "start_location": 7095, "strand": 1, "startAngle": 1.1625211816945047, "locus_tag": "Tuc2009_14"}, {"endAngle": 1.4096081361688264, "end_location": 8603, "type": "gene", "start_location": 7877, "strand": 1, "startAngle": 1.290652480367528, "locus_tag": "Tuc2009_15"}, {"endAngle": 1.5333154641715536, "end_location": 9358, "type": "gene", "start_location": 8599, "strand": 1, "startAngle": 1.40895273310656, "locus_tag": "Tuc2009_16"}, {"endAngle": 1.595414904321267, "end_location": 9737, "type": "gene", "start_location": 9347, "strand": 1, "startAngle": 1.531513105750322, "locus_tag": "Tuc2009_17"}, {"endAngle": 1.635230640353933, "end_location": 9980, "type": "gene", "start_location": 9740, "strand": 1, "startAngle": 1.5959064566179666, "locus_tag": "Tuc2009_18"}, {"endAngle": 1.682911213133792, "end_location": 10271, "type": "gene", "start_location": 10091, "strand": 1, "startAngle": 1.6534180753318173, "locus_tag": "Tuc2009_19"}, {"endAngle": 1.7745037910854806, "end_location": 10830, "type": "gene", "start_location": 10260, "strand": 1, "startAngle": 1.6811088547125603, "locus_tag": "Tuc2009_20"}, {"endAngle": 1.8410272019054903, "end_location": 11236, "type": "gene", "start_location": 10840, "strand": 1, "startAngle": 1.7761422987411457, "locus_tag": "Tuc2009_21"}, {"endAngle": 1.9291789137802815, "end_location": 11774, "type": "gene", "start_location": 11228, "strand": 1, "startAngle": 1.839716395780958, "locus_tag": "Tuc2009_22"}, {"endAngle": 1.9973408322559563, "end_location": 12190, "type": "gene", "start_location": 11770, "strand": 1, "startAngle": 1.9285235107180152, "locus_tag": "Tuc2009_23"}, {"endAngle": 2.038958926709854, "end_location": 12444, "type": "gene", "start_location": 12192, "strand": 1, "startAngle": 1.9976685337870892, "locus_tag": "Tuc2009_24"}, {"endAngle": 2.067632810683996, "end_location": 12619, "type": "gene", "start_location": 12436, "strand": 1, "startAngle": 2.0376481205853216, "locus_tag": "Tuc2009_25"}, {"endAngle": 2.1536544626064225, "end_location": 13144, "type": "gene", "start_location": 12721, "strand": 1, "startAngle": 2.084345588771782, "locus_tag": "Tuc2009_26"}, {"endAngle": 2.3555186057843827, "end_location": 14376, "type": "gene", "start_location": 13545, "strand": 1, "startAngle": 2.2193586195985993, "locus_tag": "Tuc2009_27"}, {"endAngle": 2.443014914596908, "end_location": 14910, "type": "gene", "start_location": 14448, "strand": 1, "startAngle": 2.367315860905173, "locus_tag": "Tuc2009_28"}, {"endAngle": 2.501018085607458, "end_location": 15264, "type": "gene", "start_location": 15069, "strand": 1, "startAngle": 2.4690671863219857, "locus_tag": "Tuc2009_29"}, {"endAngle": 2.6991136611773885, "end_location": 16473, "type": "gene", "start_location": 15264, "strand": 1, "startAngle": 2.501018085607458, "locus_tag": "Tuc2009_30"}, {"endAngle": 2.924244613065796, "end_location": 17847, "type": "gene", "start_location": 16485, "strand": 1, "startAngle": 2.701079870364187, "locus_tag": "Tuc2009_31"}, {"endAngle": 3.094157856958284, "end_location": 18884, "type": "gene", "start_location": 17843, "strand": 1, "startAngle": 2.92358921000353, "locus_tag": "Tuc2009_32"}, {"endAngle": 3.156093446342431, "end_location": 19262, "type": "gene", "start_location": 18929, "strand": 1, "startAngle": 3.101531141408777, "locus_tag": "Tuc2009_33"}, {"endAngle": 3.2852078496088533, "end_location": 20050, "type": "gene", "start_location": 19387, "strand": 1, "startAngle": 3.1765747920382466, "locus_tag": "Tuc2009_34"}, {"endAngle": 3.312898628989596, "end_location": 20219, "type": "gene", "start_location": 20051, "strand": 1, "startAngle": 3.28537170037442, "locus_tag": "Tuc2009_35"}, {"endAngle": 3.493626023409475, "end_location": 21322, "type": "gene", "start_location": 20389, "strand": 1, "startAngle": 3.340753259135906, "locus_tag": "Tuc2009_36"}, {"endAngle": 3.6347015325622545, "end_location": 22183, "type": "gene", "start_location": 21487, "strand": 1, "startAngle": 3.5206613997279517, "locus_tag": "Tuc2009_37"}, {"endAngle": 3.66747168567556, "end_location": 22383, "type": "gene", "start_location": 22182, "strand": 1, "startAngle": 3.6345376817966875, "locus_tag": "Tuc2009_38"}, {"endAngle": 3.7192485275945817, "end_location": 22699, "type": "gene", "start_location": 22366, "strand": 1, "startAngle": 3.6646862226609285, "locus_tag": "Tuc2009_39"}, {"endAngle": 3.7692230110923726, "end_location": 23004, "type": "gene", "start_location": 22695, "strand": 1, "startAngle": 3.7185931245323154, "locus_tag": "Tuc2009_40"}, {"endAngle": 3.8226383606670598, "end_location": 23330, "type": "gene", "start_location": 23003, "strand": 1, "startAngle": 3.769059160326806, "locus_tag": "Tuc2009_41"}, {"endAngle": 3.8858847561757393, "end_location": 23716, "type": "gene", "start_location": 23326, "strand": 1, "startAngle": 3.821982957604794, "locus_tag": "Tuc2009_42"}, {"endAngle": 3.9691209450835343, "end_location": 24224, "type": "gene", "start_location": 23726, "strand": 1, "startAngle": 3.8875232638314046, "locus_tag": "Tuc2009_43"}, {"endAngle": 4.043017640354038, "end_location": 24675, "type": "gene", "start_location": 24339, "strand": 1, "startAngle": 3.987963783123685, "locus_tag": "Tuc2009_44"}, {"endAngle": 4.1018400651924205, "end_location": 25034, "type": "gene", "start_location": 24713, "strand": 1, "startAngle": 4.049243969445566, "locus_tag": "Tuc2009_45"}, {"endAngle": 4.60846663232412, "end_location": 28126, "type": "gene", "start_location": 25048, "strand": 1, "startAngle": 4.104133975910352, "locus_tag": "Tuc2009_46"}, {"endAngle": 4.734795572575912, "end_location": 28897, "type": "gene", "start_location": 28135, "strand": 1, "startAngle": 4.609941289214219, "locus_tag": "Tuc2009_47"}, {"endAngle": 5.180469654916864, "end_location": 31617, "type": "gene", "start_location": 28896, "strand": 1, "startAngle": 4.734631721810346, "locus_tag": "Tuc2009_48"}, {"endAngle": 5.3412072559376265, "end_location": 32598, "type": "gene", "start_location": 31629, "strand": 1, "startAngle": 5.182435864103662, "locus_tag": "Tuc2009_49"}, {"endAngle": 5.482446615855972, "end_location": 33460, "type": "gene", "start_location": 32599, "strand": 1, "startAngle": 5.341371106703193, "locus_tag": "Tuc2009_50"}, {"endAngle": 5.570926029261896, "end_location": 34000, "type": "gene", "start_location": 33478, "strand": 1, "startAngle": 5.485395929636169, "locus_tag": "Tuc2009_51"}, {"endAngle": 5.6097586607011625, "end_location": 34237, "type": "gene", "start_location": 34012, "strand": 1, "startAngle": 5.572892238448695, "locus_tag": "Tuc2009_52"}, {"endAngle": 5.944505774753576, "end_location": 36280, "type": "gene", "start_location": 34249, "strand": 1, "startAngle": 5.611724869887961, "locus_tag": "Tuc2009_53"}, {"endAngle": 5.992186347533435, "end_location": 36571, "type": "gene", "start_location": 36304, "strand": 1, "startAngle": 5.948438193127173, "locus_tag": "Tuc2009_54"}, {"endAngle": 6.202406879755289, "end_location": 37854, "type": "gene", "start_location": 36567, "strand": 1, "startAngle": 5.991530944471169, "locus_tag": "Tuc2009_55"}, {"endAngle": 6.262376259952637, "end_location": 38220, "type": "gene", "start_location": 38034, "strand": 1, "startAngle": 6.231900017557263, "locus_tag": "Tuc2009_56"}]
+
+        var AF323668_data = [{"strand": -1, "type": "gene", "startAngle": 0.01644257509054256, "start_location": 93, "locus_tag": "int", "endAngle": 0.21534469312129936, "end_location": 1218}, {"strand": -1, "type": "gene", "startAngle": 0.23691452280996808, "start_location": 1340, "locus_tag": "orf2", "endAngle": 0.33344835076089535, "end_location": 1886}, {"strand": -1, "type": "gene", "startAngle": 0.3433492561917597, "start_location": 1942, "locus_tag": "orf3", "endAngle": 0.4207884808117343, "end_location": 2380}, {"strand": -1, "type": "gene", "startAngle": 0.4200812732809583, "start_location": 2376, "locus_tag": "orf4", "endAngle": 0.5160846955838037, "end_location": 2919}, {"strand": 1, "type": "gene", "startAngle": 0.5456106099937026, "start_location": 3086, "locus_tag": "orf5", "endAngle": 0.5843302223036899, "end_location": 3305}, {"strand": 1, "type": "gene", "startAngle": 0.5906950900806741, "start_location": 3341, "locus_tag": "orf6", "endAngle": 0.7222356908050146, "end_location": 4085}, {"strand": 1, "type": "gene", "startAngle": 0.7243573133973427, "start_location": 4097, "locus_tag": "orf7", "endAngle": 0.7837627459825287, "end_location": 4433}, {"strand": 1, "type": "gene", "startAngle": 0.7830555384517527, "start_location": 4429, "locus_tag": "orf8", "endAngle": 0.8058629813192795, "end_location": 4558}, {"strand": 1, "type": "gene", "startAngle": 0.8079846039116075, "start_location": 4570, "locus_tag": "orf9", "endAngle": 0.8424609710369387, "end_location": 4765}, {"strand": -1, "type": "gene", "startAngle": 0.8417537635061626, "start_location": 4761, "locus_tag": "orf10", "endAngle": 0.8905510831297083, "end_location": 5037}, {"strand": 1, "type": "gene", "startAngle": 0.9085848751644969, "start_location": 5139, "locus_tag": "orf11", "endAngle": 0.9467740818264023, "end_location": 5355}, {"strand": 1, "type": "gene", "startAngle": 0.9267954690819796, "start_location": 5242, "locus_tag": "orf12", "endAngle": 0.9644542700958029, "end_location": 5455}, {"strand": 1, "type": "gene", "startAngle": 0.9671062983362131, "start_location": 5470, "locus_tag": "orf13", "endAngle": 1.0588664754544022, "end_location": 5989}, {"strand": 1, "type": "gene", "startAngle": 1.0602808905159542, "start_location": 5997, "locus_tag": "orf14", "endAngle": 1.1706052653170138, "end_location": 6621}, {"strand": 1, "type": "gene", "startAngle": 1.1704284634343198, "start_location": 6620, "locus_tag": "orf15", "endAngle": 1.2505197162947046, "end_location": 7073}, {"strand": 1, "type": "gene", "startAngle": 1.2724431497487614, "start_location": 7197, "locus_tag": "orf16", "endAngle": 1.410879023898168, "end_location": 7980}, {"strand": 1, "type": "gene", "startAngle": 1.4107022220154741, "start_location": 7979, "locus_tag": "orf17", "endAngle": 1.5390603888513226, "end_location": 8705}, {"strand": 1, "type": "gene", "startAngle": 1.5383531813205464, "start_location": 8701, "locus_tag": "rusA", "endAngle": 1.6073059155712088, "end_location": 9091}, {"strand": 1, "type": "gene", "startAngle": 1.6076595193365968, "start_location": 9093, "locus_tag": "orf19", "endAngle": 1.642135886461928, "end_location": 9288}, {"strand": 1, "type": "gene", "startAngle": 1.6343566036233919, "start_location": 9244, "locus_tag": "orf20", "endAngle": 1.6831539232469372, "end_location": 9520}, {"strand": 1, "type": "gene", "startAngle": 1.7027789322259719, "start_location": 9631, "locus_tag": "orf21", "endAngle": 1.749985034905272, "end_location": 9898}, {"strand": 1, "type": "gene", "startAngle": 1.7536978744418459, "start_location": 9919, "locus_tag": "orf22", "endAngle": 1.7855222133267667, "end_location": 10099}, {"strand": 1, "type": "gene", "startAngle": 1.7835773926171328, "start_location": 10088, "locus_tag": "orf23", "endAngle": 1.8843544657527163, "end_location": 10658}, {"strand": 1, "type": "gene", "startAngle": 1.8861224845796563, "start_location": 10668, "locus_tag": "orf24", "endAngle": 1.9163556065203313, "end_location": 10839}, {"strand": 1, "type": "gene", "startAngle": 1.9184772291126595, "start_location": 10851, "locus_tag": "orf25", "endAngle": 1.9550752188303189, "end_location": 11058}, {"strand": 1, "type": "gene", "startAngle": 1.9536608037687666, "start_location": 11050, "locus_tag": "orf26", "endAngle": 2.00192771774423, "end_location": 11323}, {"strand": 1, "type": "gene", "startAngle": 2.001220510213454, "start_location": 11319, "locus_tag": "orf27", "endAngle": 2.0993455551086275, "end_location": 11874}, {"strand": 1, "type": "gene", "startAngle": 2.0986383475778516, "start_location": 11870, "locus_tag": "orf28", "endAngle": 2.1728951383093342, "end_location": 12290}, {"strand": 1, "type": "gene", "startAngle": 2.1732487420747217, "start_location": 12292, "locus_tag": "orf29", "endAngle": 2.261296079656337, "end_location": 12790}, {"strand": 1, "type": "gene", "startAngle": 2.2593512589467033, "start_location": 12779, "locus_tag": "orf30", "endAngle": 2.320878314124217, "end_location": 13127}, {"strand": 1, "type": "gene", "startAngle": 2.3245911536607915, "start_location": 13148, "locus_tag": "orf31", "endAngle": 2.353763464305302, "end_location": 13313}, {"strand": 1, "type": "gene", "startAngle": 2.361896350909227, "start_location": 13359, "locus_tag": "orf32", "endAngle": 2.3947815010903115, "end_location": 13545}, {"strand": 1, "type": "gene", "startAngle": 2.4020303782807657, "start_location": 13586, "locus_tag": "orf33", "endAngle": 2.432793905869523, "end_location": 13760}, {"strand": 1, "type": "gene", "startAngle": 2.432793905869523, "start_location": 13760, "locus_tag": "orf34", "endAngle": 2.485834470677725, "end_location": 14060}, {"strand": 1, "type": "gene", "startAngle": 2.4851272631469485, "start_location": 14056, "locus_tag": "orf35", "endAngle": 2.517482007679952, "end_location": 14239}, {"strand": 1, "type": "gene", "startAngle": 2.516774800149176, "start_location": 14235, "locus_tag": "orf36", "endAngle": 2.5411734599609486, "end_location": 14373}, {"strand": 1, "type": "gene", "startAngle": 2.5816610910978763, "start_location": 14602, "locus_tag": "orf37", "endAngle": 2.6336408446099138, "end_location": 14896}, {"strand": 1, "type": "gene", "startAngle": 2.647254589577352, "start_location": 14973, "locus_tag": "orf38", "endAngle": 2.7183289464203426, "end_location": 15375}, {"strand": 1, "type": "gene", "startAngle": 2.7377771535166833, "start_location": 15485, "locus_tag": "orf39", "endAngle": 2.817868406377068, "end_location": 15938}, {"strand": 1, "type": "gene", "startAngle": 2.8339573777022227, "start_location": 16029, "locus_tag": "orf40", "endAngle": 2.899197272416311, "end_location": 16398}, {"strand": 1, "type": "gene", "startAngle": 2.8961916404105126, "start_location": 16381, "locus_tag": "orf41", "endAngle": 3.2107221897231493, "end_location": 18160}, {"strand": 1, "type": "gene", "startAngle": 3.206655746421187, "start_location": 18137, "locus_tag": "orf42", "endAngle": 3.4262436847271425, "end_location": 19379}, {"strand": 1, "type": "gene", "startAngle": 3.4287189110848586, "start_location": 19393, "locus_tag": "orf43", "endAngle": 3.5342696350531804, "end_location": 19990}, {"strand": 1, "type": "gene", "startAngle": 3.5291423804550544, "start_location": 19961, "locus_tag": "orf44", "endAngle": 3.7402438283916974, "end_location": 21155}, {"strand": 1, "type": "gene", "startAngle": 3.7497911300571736, "start_location": 21209, "locus_tag": "orf45", "endAngle": 3.9014871454086313, "end_location": 22067}, {"strand": 1, "type": "gene", "startAngle": 3.900072730347079, "start_location": 22059, "locus_tag": "orf46", "endAngle": 3.9499308612667887, "end_location": 22341}, {"strand": 1, "type": "gene", "startAngle": 3.9516988800937285, "start_location": 22351, "locus_tag": "orf47", "endAngle": 4.003678633605767, "end_location": 22645}, {"strand": 1, "type": "gene", "startAngle": 4.001733812896132, "start_location": 22634, "locus_tag": "orf48", "endAngle": 4.067504113258303, "end_location": 23006}, {"strand": 1, "type": "gene", "startAngle": 4.066796905727527, "start_location": 23002, "locus_tag": "orf49", "endAngle": 4.123019904424221, "end_location": 23320}, {"strand": 1, "type": "gene", "startAngle": 4.126025536430019, "start_location": 23337, "locus_tag": "orf50", "endAngle": 4.233697882990668, "end_location": 23946}, {"strand": 1, "type": "gene", "startAngle": 4.235289099934914, "start_location": 23955, "locus_tag": "orf51", "endAngle": 4.298937777704756, "end_location": 24315}, {"strand": 1, "type": "gene", "startAngle": 4.3371269843666616, "start_location": 24531, "locus_tag": "orf52", "endAngle": 4.7370528430205034, "end_location": 26793}, {"strand": 1, "type": "gene", "startAngle": 4.7370528430205034, "start_location": 26793, "locus_tag": "orf53", "endAngle": 4.8696542550410085, "end_location": 27543}, {"strand": 1, "type": "gene", "startAngle": 4.868947047510232, "start_location": 27539, "locus_tag": "orf54", "endAngle": 5.343660102543638, "end_location": 30224}, {"strand": 1, "type": "gene", "startAngle": 5.345781725135966, "start_location": 30236, "locus_tag": "orf55", "endAngle": 5.629018341211764, "end_location": 31838}, {"strand": 1, "type": "gene", "startAngle": 5.627603926150212, "start_location": 31830, "locus_tag": "orf56", "endAngle": 5.774526290668931, "end_location": 32661}, {"strand": 1, "type": "gene", "startAngle": 5.7847807998651835, "start_location": 32719, "locus_tag": "orf57", "endAngle": 5.856915968004338, "end_location": 33127}, {"strand": 1, "type": "gene", "startAngle": 5.854440741646622, "start_location": 33113, "locus_tag": "orf58", "endAngle": 5.91437657987989, "end_location": 33452}, {"strand": 1, "type": "gene", "startAngle": 5.914553381762584, "start_location": 33453, "locus_tag": "orf59", "endAngle": 5.954864211016817, "end_location": 33681}, {"strand": 1, "type": "gene", "startAngle": 5.959284258084167, "start_location": 33706, "locus_tag": "orf60", "endAngle": 5.999064681690319, "end_location": 33931}, {"strand": 1, "type": "gene", "startAngle": 6.001186304282647, "start_location": 33943, "locus_tag": "orf61", "endAngle": 6.05210524649852, "end_location": 34231}, {"strand": 1, "type": "gene", "startAngle": 6.051928444615826, "start_location": 34230, "locus_tag": "orf62", "endAngle": 6.189833913117151, "end_location": 35010}]
+
+        var NC_003212_data = [{"endAngle": 0.1913382996675918, "start_location": 0, "strand": -1, "locus_tag": "LIN_RS13520", "end_location": 1155, "type": "gene", "startAngle": 0.0}, {"endAngle": 0.29404803628569304, "start_location": 1286, "strand": -1, "locus_tag": "LIN_RS13515", "end_location": 1775, "type": "gene", "startAngle": 0.2130398730498035}, {"endAngle": 0.3773754516387655, "start_location": 1825, "strand": -1, "locus_tag": "LIN_RS13510", "end_location": 2278, "type": "gene", "startAngle": 0.30233107956134636}, {"endAngle": 0.43370014591320805, "start_location": 2294, "strand": -1, "locus_tag": "LIN_RS13505", "end_location": 2618, "type": "gene", "startAngle": 0.38002602548697456}, {"endAngle": 0.5337593086831003, "start_location": 3018, "strand": -1, "locus_tag": "LIN_RS13500", "end_location": 3222, "type": "gene", "startAngle": 0.4999644921184347}, {"endAngle": 0.5764998119854714, "start_location": 3288, "strand": 1, "locus_tag": "LIN_RS13495", "end_location": 3480, "type": "gene", "startAngle": 0.5446929258069626}, {"endAngle": 0.620234280480921, "start_location": 3501, "strand": 1, "locus_tag": "LIN_RS13490", "end_location": 3744, "type": "gene", "startAngle": 0.5799786901612458}, {"endAngle": 0.6513785231973774, "start_location": 3746, "strand": 1, "locus_tag": "LIN_RS13485", "end_location": 3932, "type": "gene", "startAngle": 0.6205656022119471}, {"endAngle": 0.7857294851284744, "start_location": 4455, "strand": 1, "locus_tag": "LIN_RS13480", "end_location": 4743, "type": "gene", "startAngle": 0.7380191558607112}, {"endAngle": 0.9073245604150653, "start_location": 4763, "strand": 1, "locus_tag": "LIN_RS13475", "end_location": 5477, "type": "gene", "startAngle": 0.7890427024387356}, {"endAngle": 1.0655306869800438, "start_location": 5487, "strand": 1, "locus_tag": "LIN_RS13470", "end_location": 6432, "type": "gene", "startAngle": 0.9089811690701959}, {"endAngle": 1.1803336667805988, "start_location": 6444, "strand": 1, "locus_tag": "LIN_RS13465", "end_location": 7125, "type": "gene", "startAngle": 1.0675186173662006}, {"endAngle": 1.24576970865826, "start_location": 7121, "strand": 1, "locus_tag": "LIN_RS13460", "end_location": 7520, "type": "gene", "startAngle": 1.1796710233185466}, {"endAngle": 1.2757543253161252, "start_location": 7512, "strand": 1, "locus_tag": "LIN_RS13455", "end_location": 7701, "type": "gene", "startAngle": 1.2444444217341555}, {"endAngle": 1.3237959763149145, "start_location": 7697, "strand": 1, "locus_tag": "LIN_RS13450", "end_location": 7991, "type": "gene", "startAngle": 1.275091681854073}, {"endAngle": 1.357259471148554, "start_location": 8007, "strand": 1, "locus_tag": "LIN_RS13445", "end_location": 8193, "type": "gene", "startAngle": 1.3264465501631235}, {"endAngle": 1.442077834291244, "start_location": 8189, "strand": 1, "locus_tag": "LIN_RS13440", "end_location": 8705, "type": "gene", "startAngle": 1.3565968276865017}, {"endAngle": 1.4757069899903963, "start_location": 8701, "strand": 1, "locus_tag": "LIN_RS13435", "end_location": 8908, "type": "gene", "startAngle": 1.4414151908291917}, {"endAngle": 1.5063542501103135, "start_location": 8907, "strand": 1, "locus_tag": "LIN_RS13430", "end_location": 9093, "type": "gene", "startAngle": 1.4755413291248833}, {"endAngle": 1.5429653013887015, "start_location": 9092, "strand": 1, "locus_tag": "LIN_RS13425", "end_location": 9314, "type": "gene", "startAngle": 1.5061885892448006}, {"endAngle": 1.6209915690453556, "start_location": 9515, "strand": 1, "locus_tag": "LIN_RS13420", "end_location": 9785, "type": "gene", "startAngle": 1.576263135356828}, {"endAngle": 1.7121050450775424, "start_location": 9951, "strand": 1, "locus_tag": "LIN_RS13415", "end_location": 10335, "type": "gene", "startAngle": 1.648491272720525}, {"endAngle": 1.791787921389327, "start_location": 10336, "strand": 1, "locus_tag": "LIN_RS13410", "end_location": 10816, "type": "gene", "startAngle": 1.7122707059430553}, {"endAngle": 1.9080818489794997, "start_location": 10828, "strand": 1, "locus_tag": "LIN_RS13405", "end_location": 11518, "type": "gene", "startAngle": 1.7937758517754838}, {"endAngle": 2.126754191456748, "start_location": 11644, "strand": 1, "locus_tag": "LIN_RS13400", "end_location": 12838, "type": "gene", "startAngle": 1.9289551180341462}, {"endAngle": 2.2104129285408463, "start_location": 12860, "strand": 1, "locus_tag": "LIN_RS13395", "end_location": 13343, "type": "gene", "startAngle": 2.1303987304980354}, {"endAngle": 2.590770275758847, "start_location": 13365, "strand": 1, "locus_tag": "LIN_RS13390", "end_location": 15639, "type": "gene", "startAngle": 2.214057467582134}, {"endAngle": 2.690663777663226, "start_location": 15927, "strand": 1, "locus_tag": "LIN_RS13385", "end_location": 16242, "type": "gene", "startAngle": 2.6384806050266105}, {"endAngle": 2.7978463576501804, "start_location": 16295, "strand": 1, "locus_tag": "LIN_RS13380", "end_location": 16889, "type": "gene", "startAngle": 2.6994438035354187}, {"endAngle": 2.8713997819379817, "start_location": 17105, "strand": 1, "locus_tag": "LIN_RS13375", "end_location": 17333, "type": "gene", "startAngle": 2.8336291046010027}, {"endAngle": 2.9439592410327045, "start_location": 17345, "strand": 1, "locus_tag": "LIN_RS13370", "end_location": 17771, "type": "gene", "startAngle": 2.8733877123241385}, {"endAngle": 3.0832800289291935, "start_location": 17868, "strand": 1, "locus_tag": "LIN_RS13365", "end_location": 18612, "type": "gene", "startAngle": 2.9600283449874722}, {"endAngle": 3.1979173478642355, "start_location": 18929, "strand": 1, "locus_tag": "LIN_RS13360", "end_location": 19304, "type": "gene", "startAngle": 3.135794523296836}, {"endAngle": 3.266666607052158, "start_location": 19344, "strand": 1, "locus_tag": "LIN_RS13355", "end_location": 19719, "type": "gene", "startAngle": 3.2045437824847585}, {"endAngle": 3.5562417999689986, "start_location": 19715, "strand": 1, "locus_tag": "LIN_RS13350", "end_location": 21467, "type": "gene", "startAngle": 3.266003963590106}, {"endAngle": 3.7542065342571127, "start_location": 21480, "strand": 1, "locus_tag": "LIN_RS13345", "end_location": 22662, "type": "gene", "startAngle": 3.5583953912206687}, {"endAngle": 3.850455497120205, "start_location": 22658, "strand": 1, "locus_tag": "LIN_RS13340", "end_location": 23243, "type": "gene", "startAngle": 3.7535438907950605}, {"endAngle": 4.045603996694597, "start_location": 23233, "strand": 1, "locus_tag": "LIN_RS13335", "end_location": 24421, "type": "gene", "startAngle": 3.848798888465074}, {"endAngle": 4.076085595949001, "start_location": 24425, "strand": 1, "locus_tag": "LIN_RS13330", "end_location": 24605, "type": "gene", "startAngle": 4.04626664015665}, {"endAngle": 4.1236302643512515, "start_location": 24604, "strand": 1, "locus_tag": "LIN_RS13325", "end_location": 24892, "type": "gene", "startAngle": 4.075919935083488}, {"endAngle": 4.172003237081067, "start_location": 24878, "strand": 1, "locus_tag": "LIN_RS13320", "end_location": 25184, "type": "gene", "startAngle": 4.121311012234068}, {"endAngle": 4.231641148665771, "start_location": 25190, "strand": 1, "locus_tag": "LIN_RS13315", "end_location": 25544, "type": "gene", "startAngle": 4.1729972022741455}, {"endAngle": 4.284652625629952, "start_location": 25540, "strand": 1, "locus_tag": "LIN_RS13310", "end_location": 25864, "type": "gene", "startAngle": 4.230978505203718}, {"endAngle": 4.380570266762017, "start_location": 25864, "strand": 1, "locus_tag": "LIN_RS13305", "end_location": 26443, "type": "gene", "startAngle": 4.284652625629952}, {"endAngle": 4.446834612967244, "start_location": 26486, "strand": 1, "locus_tag": "LIN_RS13300", "end_location": 26843, "type": "gene", "startAngle": 4.387693683979079}, {"endAngle": 5.027475946590543, "start_location": 27066, "strand": 1, "locus_tag": "LIN_RS13295", "end_location": 30348, "type": "gene", "startAngle": 4.483776985976657}, {"endAngle": 5.1495680044736725, "start_location": 30344, "strand": 1, "locus_tag": "LIN_RS13290", "end_location": 31085, "type": "gene", "startAngle": 5.02681330312849}, {"endAngle": 5.501266021957912, "start_location": 31066, "strand": 1, "locus_tag": "LIN_RS13285", "end_location": 33208, "type": "gene", "startAngle": 5.146420448028924}, {"endAngle": 5.686474869601521, "start_location": 33204, "strand": 1, "locus_tag": "LIN_RS13280", "end_location": 34326, "type": "gene", "startAngle": 5.50060337849586}, {"endAngle": 5.742468242144938, "start_location": 34322, "strand": 1, "locus_tag": "LIN_RS13275", "end_location": 34664, "type": "gene", "startAngle": 5.685812226139468}, {"endAngle": 5.824139048842879, "start_location": 34851, "strand": 1, "locus_tag": "LIN_RS13270", "end_location": 35157, "type": "gene", "startAngle": 5.77344682399588}, {"endAngle": 5.8706897520520505, "start_location": 35156, "strand": 1, "locus_tag": "LIN_RS13265", "end_location": 35438, "type": "gene", "startAngle": 5.823973387977365}, {"endAngle": 6.028067574289463, "start_location": 35437, "strand": 1, "locus_tag": "LIN_RS13260", "end_location": 36388, "type": "gene", "startAngle": 5.870524091186537}, {"endAngle": 6.236634603970415, "start_location": 36750, "strand": 1, "locus_tag": "LIN_RS13255", "end_location": 37647, "type": "gene", "startAngle": 6.088036807605193}, {"endAngle": 6.283185307179586, "start_location": 37721, "strand": -1, "locus_tag": "LIN_RS13250", "end_location": 37928, "type": "gene", "startAngle": 6.248893508018382}]
+
+        var bp_length = 44013;
+        var width = 1000;
+        var height = 800;
+        var track_scale = 0.1;
+        var bar_height = 30;
+        var track;
+        var ncbi_id = 33321103;
+        var track_2_offset = 200;
+        var track_3_offset = 400;
+
+        var tooltip = d3.select('#chart')
+          .append('div')
+          .attr('class', 'tooltip');
+        tooltip.append('div')
+          .attr('class', 'locus_tag');
+        tooltip.append('div')
+          .attr('class', 'start_location');
+        tooltip.append('div')
+          .attr('class', 'end_location');
+        tooltip.append('div')
+          .attr('class', 'type');
+        tooltip.append('div')
+          .attr('class', 'strand');
+        tooltip.append('div')
+          .attr('class', 'ncbi_view');
+
+        var svg = d3.select('#chart')
+          .append('svg')
+          .attr('width', width)
+          .attr('height', height)
+
+        var newRamp = d3.scale.linear().domain([0,bp_length]).range([0, width]);
+
+        var links = [
+          ["#orf39", "#LIN_RS13520", 42],
+          ["#orf40", "#LIN_RS13355", 31],
+          ["#orf41", "#LIN_RS13350", 49], 
+          ["#orf42", "#LIN_RS13345", 54], 
+          ["#orf43", "#LIN_RS13340", 55], 
+          ["#orf44", "#LIN_RS13335", 33], 
+          ["#orf46", "#LIN_RS13325", 51],
+          ["#orf47", "#LIN_RS13320", 33],
+          ["#orf48", "#LIN_RS13315", 40],
+          ["#orf49", "#LIN_RS13310", 25],
+          ["#orf50", "#LIN_RS13305", 50],
+          ["#orf51", "#LIN_RS13300", 48],
+          ["#orf52", "#LIN_RS13295", 24],
+          ["#orf53", "#LIN_RS13290", 30],
+          ["#orf54", "#LIN_RS13285", 28],
+        ]
+
+
+        var path = svg.append('g')
+          .attr("id", "NC_002703_data")
+          .selectAll("rect")                             //svg already refers to the paths in g div
+          .data(NC_002703_data).enter()
+          .append('rect')
+          .attr("data-strand", function(d) { return d.strand })
+          .attr("id", function(d) { return d.locus_tag})
+          .attr("height", bar_height)
+          .attr("width", function(d) {return newRamp(d.end_location-d.start_location);})
+          .style("fill", "none")
+          .attr("x", function(d) { return newRamp(d.start_location);})
+          .attr("y", function(d) { 
+            if (d.strand==1) { return bar_height }
+            else { return 0 }
+          })
+          .on('mouseover', mouseover)
+          .on('mouseout', mouseout)
+
+        var path = svg.append('g')
+          .attr("id", "NC_003212_data")
+          .selectAll("rect")                             //svg already refers to the paths in g div
+          .data(NC_003212_data)
+          .enter()
+          .append('rect')
+          .attr("data-strand", function(d) { return d.strand })
+          .attr("id", function(d) { return d.locus_tag})
+          .attr("height", bar_height)
+          .attr("width", function(d) {return newRamp(d.end_location-d.start_location);})
+          .style("fill", "none")
+          .attr("x", function(d) { return newRamp(d.start_location);})
+          .attr("y", function(d) { 
+            if (d.strand==1) { return track_2_offset + bar_height }
+            else { return track_2_offset } })
+          .on('mouseover', mouseover)
+          .on('mouseout', mouseout)
+
+        var path = svg.append('g')
+          .attr("id", "AF323668_data")
+          .selectAll("rect")                             //svg already refers to the paths in g div
+          .data(AF323668_data)
+          .enter()
+          .append('rect')
+          .attr("data-strand", function(d) { return d.strand })
+          .attr("id", function(d) { return d.locus_tag})
+          .attr("height", bar_height)
+          .attr("width", function(d) {return newRamp(d.end_location-d.start_location);})
+          .style("fill", "none")
+          .attr("x", function(d) { return newRamp(d.start_location);})
+          .attr("y", function(d) { 
+            if (d.strand==1) { return track_3_offset + bar_height }
+            else {return track_3_offset}
+          })
+          .on('mouseover', mouseover)
+          .on('mouseout', mouseout)
+
+
+        var path_links = svg.append('g')
+          .attr('id', 'links')
+          .selectAll("polygon")
+          .data(links).enter()
+          .append('polygon')
+          .attr('data-link', function(d,i) {return i} )
+          .attr("points", function(d) {
+            if ( d3.select(d[0]).attr('y') < d3.select(d[1]).attr('y') ) { 
+              var source = d3.select(d[0])
+              var target = d3.select(d[1]) 
+            }
+            else {
+              var source = d3.select(d[1])
+              var target = d3.select(d[0])
+            }
+          return [
+            [ parseInt(source.attr('x')),                                  track_2_offset + 2 * bar_height ].join(','),
+            [ parseInt(source.attr('x')),                                  parseInt(source.attr('y')) + bar_height ].join(','),
+            [ parseInt(source.attr('x')) + parseInt(source.attr('width')), parseInt(source.attr('y')) + bar_height ].join(','),
+            [ parseInt(source.attr('x')) + parseInt(source.attr('width')), track_2_offset + 2 * bar_height ].join(','),
+            [ parseInt(target.attr('x')) + parseInt(target.attr('width')), track_3_offset ].join(','),
+            [ parseInt(target.attr('x')) + parseInt(target.attr('width')), parseInt(target.attr('y')) ].join(','),
+            [ parseInt(target.attr('x')),                                  parseInt(target.attr('y')) ].join(','),
+            [ parseInt(target.attr('x')),                                  track_3_offset ].join(',')
+            ].join(" ")
+            })
+          .style("fill", "#ad0052")
+          .style("opacity", function(d) { return d[2]/100 } )
+
+        d3.select("#NC_002703_data")
+          .selectAll('rect')
+          .style("fill", "steelblue");
+        d3.select("#NC_003212_data")
+          .selectAll('rect')
+          .style("fill", "steelblue");
+        d3.select("#AF323668_data")
+          .selectAll('rect')
+          .style("fill", "steelblue");
+
+        function mouseover(d) {
+          tooltip.select('.locus_tag').html("<b>Locus tag:</b> " + d.locus_tag);
+          tooltip.select('.start_location').html("<b>Start location:</b> " + d.start_location);
+          tooltip.select('.end_location').html("<b>End location:</b> " + d.end_location);
+          tooltip.select('.type').html("<b>Type:</b> " + d.type);
+          tooltip.select('.strand').html("<b>Strand:</b> " + d.strand);
+          tooltip.style('display', 'block');
+          tooltip.style("left", d3.select(this).attr('x') + "px")
+          tooltip.style("top",  parseInt(d3.select(this).attr('y')) + 40 + "px")
+          tooltip.select('.ncbi_view').html('<a href=' + '"http://www.ncbi.nlm.nih.gov/nuccore/' + ncbi_id + '?from=' + d.start_location + '&to=' + d.end_location + '"target="_blank"' + '>'+ 'View sequence in NCBI' + "</a>");
+          d3.select(this).style({'fill-opacity': 0.7,'stroke':'grey', 'stroke-width': 1, 'stroke-opacity':1,})
+        }
+
+        function mouseout(d) {
+          d3.select(this).style({'fill-opacity': 1, 'stroke': 'none'})
+        }
+    </script>
+  </body>
+</html>
+
